@@ -6,19 +6,12 @@ import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailId, setEmailId] = useState("ankita@gmail.com");
+  const [password, setPassword] = useState("Ankita@123");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-
-  const getUser = async () => {
-    const user = await axios.get(BASE_URL + "/profile/view", {
-      withCredentials: true,
-    });
-    dispatch(addUser(user.data));
-    return navigate("/");
-  };
 
   const handleLogin = async () => {
     try {
@@ -30,11 +23,12 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      if (res.data) {
-        getUser();
+      if (res.data.data) {
+        dispatch(addUser(res.data.data));
+        return navigate("/");
       }
     } catch (err) {
-      console.log(err);
+      setError(err.response.data.message);
     }
   };
 
@@ -60,6 +54,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
+            {error && <p className="text-red-500">{error}</p>}
             <button className="btn btn-neutral mt-4" onClick={handleLogin}>
               Login
             </button>

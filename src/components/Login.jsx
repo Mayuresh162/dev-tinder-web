@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
   const [emailId, setEmailId] = useState("");
@@ -8,7 +9,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "",
+        BASE_URL + "/login",
         {
           emailId,
           password,
